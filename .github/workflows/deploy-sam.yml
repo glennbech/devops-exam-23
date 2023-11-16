@@ -3,7 +3,6 @@ name: Deploy SAM
 on:
   push:
     branches:
-      - main
       - '*'
 
 jobs:
