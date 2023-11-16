@@ -3,11 +3,12 @@ name: Deploy SAM
 on:
   push:
     branches:
+      - main
       - '*'
 
 jobs:
   build:
-    if: github.refs != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
