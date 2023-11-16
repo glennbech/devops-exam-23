@@ -31,4 +31,4 @@ jobs:
       - name: Build and deploy SAM
         run: |
           sam build -t eksamen_2023-main/eksamen_2023-main/kjell/template.yaml --use-container
-          sam deploy --stack-name candidate2005Stack --region eu-west-1 --s3-bucket candidate2005Bucket --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-sentiment-kandidat2005  --s3-bucket kandidat2005bucket  --capabilities CAPABILITY_IAM --region eu-west-1
