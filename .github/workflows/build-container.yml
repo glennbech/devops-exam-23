@@ -24,7 +24,7 @@ jobs:
           rev=$(git rev-parse --short HEAD)
           cd eksamen_2023-main/eksamen_2023-main
           docker build . -t kandidat2005 
-          docker tag hello 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:$rev
-          docker tag hello 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
+          docker tag kandidat2005 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:$rev
+          docker tag kandidat2005 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
           docker push 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:$rev
           docker push 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
