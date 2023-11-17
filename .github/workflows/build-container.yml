@@ -9,13 +9,13 @@ on:
 
 jobs:
   build_docker_image:
-    name: Push Docker image to ECR
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -27,8 +27,8 @@ jobs:
           docker tag kandidat2005 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:$rev
           docker tag kandidat2005 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
       
-      - name: Deploy Docker Image
-        if: github.ref != 'refs/heads/main'
+      - name: Deploy Docker image
+        if: github.ref == 'refs/heads/main'
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
