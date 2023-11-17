@@ -67,7 +67,9 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -no-color
+        run: |
+         cd eksamen_2023-main/eksamen_2023-main/infra
+         terraform plan -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -no-color
         continue-on-error: true
 
       - name: Terraform Plan Status
