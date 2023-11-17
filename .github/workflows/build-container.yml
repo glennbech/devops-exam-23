@@ -64,6 +64,9 @@ jobs:
         
       - name: Locate files
         run: cd eksamen_2023-main/eksamen_2023-main/infra
+        
+      - name: Show current directory
+        run: pwd
 
       - name: Terraform Init
         id: init
