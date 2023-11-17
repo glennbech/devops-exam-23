@@ -41,37 +41,37 @@ jobs:
          
     
     terraform:
-    name: "Terraform"
-    needs: build_and_push_docker_image
-    runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: eu-west-1
-      SERVICE_NAME: kandidat2005
-      IAM_ROLE: kandidat2005 sin rolle
-      IAM_POLICY: kandidat2005 sin policy
-      IAM_POLICY_DESCRIPTION: en forklaring av kandidat2005 son policy
-      IMAGE_IDENTIFIER: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan   -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -no-color
-        continue-on-error: true
-
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -auto-approve
+      name: "Terraform"
+      needs: build_and_push_docker_image
+      runs-on: ubuntu-latest
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: eu-west-1
+        SERVICE_NAME: kandidat2005
+        IAM_ROLE: kandidat2005 sin rolle
+        IAM_POLICY: kandidat2005 sin policy
+        IAM_POLICY_DESCRIPTION: en forklaring av kandidat2005 son policy
+        IMAGE_IDENTIFIER: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
+  
+      steps:
+        - uses: actions/checkout@v3
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v2
+  
+        - name: Terraform Init
+          id: init
+          run: terraform init
+  
+        - name: Terraform Plan
+          id: plan
+          run: terraform plan   -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -no-color
+          continue-on-error: true
+  
+        - name: Terraform Plan Status
+          if: steps.plan.outcome == 'failure'
+          run: exit 1
+  
+        - name: Terraform Apply
+          if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+          run: terraform apply -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -auto-approve
