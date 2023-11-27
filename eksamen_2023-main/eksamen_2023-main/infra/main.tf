@@ -3,8 +3,8 @@ resource "aws_apprunner_service" "service" {
 
   instance_configuration {
     instance_role_arn = aws_iam_role.role_for_apprunner_service.arn
-    cpu = 256
-    memory = 1024
+    cpu = 1024
+    memory = 2048
   }
 
   source_configuration {
@@ -73,3 +73,31 @@ resource "aws_iam_role_policy_attachment" "attachment" {
   policy_arn = aws_iam_policy.policy.arn
 }
 
+resource "aws_cloudwatch_dashboard" "main" {
+  dashboard_name = var.dashboard_name
+  dashboard_body = <<DASHBOARD
+  {
+  "widgets": [
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "${var.dashboard_name}",
+            "images_count.value"
+          ]
+        ],
+        "period": 300,
+        "stat": "Maximum",
+        "region": "eu-west-1",
+        "title": "Total number of images"
+      }
+    }
+  ]
+}
+DASHBOARD
+}

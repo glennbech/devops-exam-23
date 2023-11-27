@@ -49,10 +49,13 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: eu-west-1
       SERVICE_NAME: kandidat2005
-      IAM_ROLE: kandidat2005-sin-rolle
-      IAM_POLICY: kandidat2005-sin-policy
+      IAM_ROLE: kandidat2005
+      IAM_POLICY: kandidat2005
       IAM_POLICY_DESCRIPTION: en forklaring av kandidat2005 sin policy
       IMAGE_IDENTIFIER: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2005-repo:latest
+      DASHBOARD_BODY: kandidat2005-sin-dashboard-DASHBOARD
+      DASHBOARD_NAME: kandidat2005-dashboard
+      
 
     steps:
       - uses: actions/checkout@v3
@@ -69,7 +72,7 @@ jobs:
         id: plan
         run: |
          cd eksamen_2023-main/eksamen_2023-main/infra
-         terraform plan -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -no-color
+         terraform plan -var="service_name=$SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER" -var="dashboard_body=$DASHBOARD_BODY" -var="dashboard_name=$DASHBOARD_NAME"  -no-color
         continue-on-error: true
 
       - name: Terraform Plan Status
@@ -77,7 +80,6 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: | 
           cd eksamen_2023-main/eksamen_2023-main/infra
-          terraform apply -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -auto-approve
+          terraform apply -var="service_name=$SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER" -var="dashboard_body=$DASHBOARD_BODY" -var="dashboard_name=$DASHBOARD_NAME"  -auto-approve

@@ -9,13 +9,20 @@ import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.example.s3rekognition.PPEClassificationResponse;
 import com.example.s3rekognition.PPEResponse;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -24,12 +31,17 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
 
     private final AmazonS3 s3Client;
     private final AmazonRekognition rekognitionClient;
+    private final MeterRegistry meterRegistry;
+
+    private Map<Integer, String> imagesScanned = new HashMap();
+    
 
     private static final Logger logger = Logger.getLogger(RekognitionController.class.getName());
 
-    public RekognitionController() {
+    public RekognitionController(MeterRegistry meterRegistry) {
         this.s3Client = AmazonS3ClientBuilder.standard().build();
         this.rekognitionClient = AmazonRekognitionClientBuilder.standard().build();
+        this.meterRegistry = meterRegistry;
     }
 
     /**
@@ -56,6 +68,8 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
         for (S3ObjectSummary image : images) {
             logger.info("scanning " + image.getKey());
 
+            meterRegistry.counter("scan").increment();
+
             // This is where the magic happens, use AWS rekognition to detect PPE
             DetectProtectiveEquipmentRequest request = new DetectProtectiveEquipmentRequest()
                     .withImage(new Image()
@@ -76,6 +90,10 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
             int personCount = result.getPersons().size();
             PPEClassificationResponse classification = new PPEClassificationResponse(image.getKey(), personCount, violation);
             classificationResponses.add(classification);
+            
+            if (violation) {
+                meterRegistry.counter("vialation").increment(); // Inkrementer metrikken for brudd på regler hvis det er brudd
+            }
         }
         PPEResponse ppeResponse = new PPEResponse(bucketName, classificationResponses);
         return ResponseEntity.ok(ppeResponse);
@@ -100,6 +118,7 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-
+        Gauge.builder("image_count", imagesScanned,
+             b -> b.values().size()).register(meterRegistry);
     }
 }
