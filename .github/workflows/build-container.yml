@@ -78,6 +78,6 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run:| 
+        run: | 
           cd eksamen_2023-main/eksamen_2023-main/infra
           terraform apply -var="service_name=SERVICE_NAME" -var="iam_role=$IAM_ROLE" -var="iam_policy=$IAM_POLICY" -var="iam_policy_description=$IAM_POLICY_DESCRIPTION" -var="image_identifier=$IMAGE_IDENTIFIER"  -auto-approve
