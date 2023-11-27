@@ -53,7 +53,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
         
-      - name: Deploy SAM
+      - name: Build & Deploy SAM
         run: |
           sam build -t eksamen_2023-main/eksamen_2023-main/kjell/template.yaml --use-container
           sam deploy --stack-name kandidat2005 --region eu-west-1 --s3-bucket kandidat2005bucket --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset --no-confirm-changeset
