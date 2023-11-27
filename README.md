@@ -2,20 +2,41 @@
 
 kandidatnummer: 2005
 
-Hei.
+Hei. Her er mitt forsøk på å løse eksamen i PGR301 DevOps i skyen. Noen oppgaver gikk greit, mens andre slet jeg med og mangler fullstendige svar. Jeg har kommentert dette hvor det gjelder.
+Jeg slet også med uheldig sykdom i eksamensløpet som heller ikke hjalp.
 
 ## Oppgave 1. 
 
-For å kunne kjøre github actions på ditt eget repo er det viktig at du legger inn secrets 
+For å kunne kjøre github actions på ditt eget repo er det viktig at du har dine egne IAM nøkler og legger inn disse som secrets  i ditt eget repo.
 
 AWS_SECRET_ACCESS_KEY 
 AWS_ACCESS_KEY_ID
 
 Dette kan du gjøre i settings i ditt github repository.
 
-Med dette skal du kunne gjøre en endring i koden f.eks her:
+Med dette skal du kunne gjøre en endring i koden f.eks her for å kunne kjøre github actions:
 
 [ SKRIV NOE HER FOR Å TESTE ]
+
+## Oppgave 2.
+
+A. Burde funke som ønsket. Har testet å gjøre kommandoene selv og fått ut ønsket respons.
+B. Har kjørt grønt og fint og burde fungere fint på et forket repo også.
+
+## Oppgave 3.
+
+A. Her møtte jeg på en error som jeg slet med. Jeg fikk ikke lov til å endre cpu og memory til verdiene som var nevnt i oppgaven. Jeg endte stadig opp med en error som sa at jeg måtte ha det etter et visst regex oppsett, som ikke inkluderte alternativene 256 og 1024. Jeg har derfor andre verdier i main.tf filen.
+
+Her er erroren: 
+![image](https://github.com/Frodsand/devops-exam-23/assets/94897200/94ec8b5d-6243-4765-97ed-cb656a202950)
+
+B. Her trenger ikke sensor å gjøre noen endringer. Jeg kunne lagt til variablene som SERVICE_NAME og IMAGE til github secrets. Men, jeg valgte å la være, da jeg ikke følte det var nødvendig.
+
+## Oppgave 4.
+
+A. Her er oppgaven jeg virkelig slet med. Jeg å skape et dashboard og få oversikt over metrics opp. Men, jeg klarte ikke å lege til noen metrics. Det jeg dog prøvde å legge til var en Gauge som talte hvor mange images som ble scannet og hvor mange vialations som ble oppdaget.
+
+B. Følge feil. Rakk aldri å begynne på denne da jeg ikke fikk til oppgave A.
 
 
 ## Oppgave 5.
